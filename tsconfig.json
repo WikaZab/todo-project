@@ -9,6 +9,7 @@
     "strict": true,
     "moduleResolution": "node", //определяет какие импорты будут
     "baseUrl": ".",
+    "lib": ["ES2015", "DOM"],
     "paths": {
       "*": ["./src/*"]
     },
