@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/", //то куда идет сборка, нам неважно едь собираем мы через вебпак
+    "noImplicitAny": true, //подсвечивает места где не указан тип
+    "module": "ESNext", //способы модульной сборки
+    "target": "es5", //в какую спецификацию компилируем
+    "jsx": "react-jsx", //делать конструкции как в реакт
+    "allowJs": true, // компилятор обрабатывает не только тс файлы но и js
+    "strict": true,
+    "moduleResolution": "node", //определяет какие импорты будут
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./src/*"]
+    },
+    //для абсолютного импорта
+    "allowSyntheticDefaultImports": true, //позволяет писать дефолтный импорт
+    "esModuleInterop": true //позволяет привычно  импортировать и экспорт без модульс и рекваер
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "include" : [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "eslint.config.js",
+    ".eslintrc.js",
+    "webpack.config.ts",
+    "*.config.ts",
+    "*.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}
