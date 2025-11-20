@@ -7,16 +7,12 @@
   background-color: var(--bg-color);
   color: var(--font-color);
 }
-//.body {
-//  font: var(--font-m);
-//  color: var(--primary-color);
-//}
-//
-//.app {
-//  min-height: 100vh;
-//  background: var(--bg-color);
-//}
-//
-//.content-page {
-//  display: flex;
-//}
+.body {
+  font: var(--font-m);
+  color: var(--primary-color);
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--bg-color);
+}

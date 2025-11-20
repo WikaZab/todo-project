@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import ThemeProvider from 'components/theme/ThemeProvider';
+import ThemeProvider from 'app/providers/theme/ThemeProvider';
 import App from './App';
 
 const rootElement = document.getElementById('root');
