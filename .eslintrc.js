@@ -53,9 +53,9 @@ module.exports = {
         'no-undef': 'off',
     },
     globals: {
-        __IS_DEV__: true,
-        __API__: true,
-        __PROJECT__: true,
+        IS_DEV: true,
+        MY_API: true,
+        PROJECT: true,
     },
     overrides: [
         {

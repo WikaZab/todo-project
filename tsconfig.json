@@ -1,28 +1,31 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/", //то куда идет сборка, нам неважно едь собираем мы через вебпак
-    "noImplicitAny": true, //подсвечивает места где не указан тип
-    "module": "ESNext", //способы модульной сборки
-    "target": "es5", //в какую спецификацию компилируем
-    "jsx": "react-jsx", //делать конструкции как в реакт
-    "allowJs": true, // компилятор обрабатывает не только тс файлы но и js
+    "target": "es5",//ES2020
+    "lib": ["dom", "dom.iterable", "ES6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "moduleResolution": "node", //определяет какие импорты будут
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false, // ИЗМЕНИТЕ НА false
+    "jsx": "react-jsx",
     "baseUrl": ".",
-    "lib": ["ES2015", "DOM"],
     "paths": {
       "*": ["./src/*"]
-    },
-    //для абсолютного импорта
-    "allowSyntheticDefaultImports": true, //позволяет писать дефолтный импорт
-    "esModuleInterop": true //позволяет привычно  импортировать и экспорт без модульс и рекваер
+    }
   },
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
     }
   },
-  "include" : [
+  "include": [
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",

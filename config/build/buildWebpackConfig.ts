@@ -1,14 +1,13 @@
-import webpack, { config } from 'webpack';
+import webpack from 'webpack';
 import { BuildOptions } from './types/config';
 import { buildPlugins } from './buildPlugin';
 import { buildLoaders } from './buildLoaders';
-
 import { buildResolves } from './buildResolves';
 import { buildDevServer } from './buildDevServer';
 
-export function buildWebpackConfig(options: BuildOptions) : webpack.WebpackOptionsNormalized {
+export function buildWebpackConfig(options: BuildOptions) : webpack.Configuration {
     const { mode, paths, isDev } = options;
-    const configBase = {
+    return {
         mode, // если дев режим разработки, то все с коментариями и подробно.
         entry: paths.entry, // резолф для склейки учатков пути   //стартовая точка нашего прложения
         output: {
@@ -23,9 +22,6 @@ export function buildWebpackConfig(options: BuildOptions) : webpack.WebpackOptio
         },
         resolve: buildResolves(options),
         devtool: isDev ? 'inline-source-map' : undefined,
-        devServer: buildDevServer(options),
+        devServer: isDev ? buildDevServer(options) : undefined,
     };
-
-    const normalized = config.getNormalizedWebpackOptions(configBase);
-    return normalized;
 }
