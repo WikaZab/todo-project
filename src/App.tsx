@@ -9,7 +9,9 @@ const App = () => {
     const { theme, toggleTheme } = useTheme();
     return (
         <div className={`app ${theme}`}>
-            <ThemeSwitcher />
+            <div className="switcher">
+                <ThemeSwitcher />
+            </div>
             <AppRouter />
         </div>
 
