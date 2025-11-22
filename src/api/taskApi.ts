@@ -17,6 +17,13 @@ export const taskApi = createApi({
             }),
             providesTags: ['Task'],
         }),
+        getTaskById: builder.query<Task, number >({
+            query: (id) => ({
+                url: `/tasks/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['Task'],
+        }),
 
         getTasksWithFilters: builder.query<Task[], TaskFilter>({
             query: (filters) => ({
@@ -57,6 +64,7 @@ export const taskApi = createApi({
 
 export const {
     useGetTasksQuery,
+    useGetTaskByIdQuery,
     useGetTasksWithFiltersQuery,
     useCreateTaskMutation,
     useUpdateTaskMutation,

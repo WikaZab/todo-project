@@ -45,9 +45,11 @@
   border-radius: 0.5rem;
   background-color: var(--bg-color);
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-
+  &.completed {
+    opacity: 0.5;
+  }
   &.important {
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--accent-color);
   }
 }
 
@@ -80,7 +82,7 @@
   }
 
   &.importantText {
-    color: var(--primary-color);
+    color: var(--accent-color);
   }
 }
 
@@ -94,14 +96,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.importantBadge {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 9999px;
-  background-color: #fef9c3;
-  color: #854d0e;
 }
 
 .statusBadge {
@@ -119,6 +113,22 @@
     color: #1e40af;
   }
 }
+.taskActions{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  .editButton{
+    background-color: var(--accent-color);
+    color: var(--font-primary-color);
+    border: none;
+    padding: 3px 0 0 3px;
+  }
+  .deleteButton{
+    background-color: var(--secondary-color);
+    border: none;
+  }
+}
+
 
 @keyframes spin {
   from {

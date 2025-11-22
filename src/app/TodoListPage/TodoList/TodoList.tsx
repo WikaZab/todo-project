@@ -1,10 +1,43 @@
 import React from 'react';
-import { useGetTasksQuery } from 'api/taskApi';
+import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from 'api/taskApi';
 import { Task } from 'types/TodoListTypes';
 import * as cls from 'app/TodoListPage/TodoList/TodoList.module.scss';
+import { useNavigate } from 'react-router';
+import DeleteIcon from 'components/assets/delete.svg';
+import EditIcon from 'components/assets/edit.svg';
 
 const TaskList: React.FC = () => {
-    const { data: tasks, error, isLoading } = useGetTasksQuery();
+    const { data: tasks, error: getTaskError, isLoading } = useGetTasksQuery();
+    const [updateTask] = useUpdateTaskMutation();
+    const [deleteTask] = useDeleteTaskMutation();
+    const navigate = useNavigate();
+
+    // Обработчик изменения статуса задачи
+    const handleToggleComplete = async (task: Task) => {
+        try {
+            await updateTask({
+                id: task.id,
+                isCompleted: !task.isCompleted,
+            }).unwrap();
+        } catch (error) {
+            console.error('Ошибка при обновлении задачи:', error);
+        }
+    };
+
+    // Обработчик удаления задачи
+    const handleDeleteTask = async (taskId: number) => {
+        try {
+            await deleteTask(taskId).unwrap();
+        } catch (error) {
+            console.error('Ошибка при удалении задачи:', error);
+        }
+    };
+
+    // Обработчик редактирования задачи
+    const handleEditTask = (task: Task) => {
+        console.log('Редактирование задачи:', task);
+        navigate(`/edit/${task.id}`); // ______________________________________________________________________________ заменить пути на константы
+    };
 
     if (isLoading) {
         return (
@@ -15,11 +48,11 @@ const TaskList: React.FC = () => {
         );
     }
 
-    if (error) {
+    if (getTaskError) {
         return (
             <div className={cls.errorContainer}>
                 Ошибка при загрузке задач:
-                {'status' in error ? error.status : 'Неизвестная ошибка'}
+                {'status' in getTaskError ? getTaskError.status : 'Неизвестная ошибка'}
             </div>
         );
     }
@@ -39,6 +72,7 @@ const TaskList: React.FC = () => {
                     key={task.id}
                     className={`
                         ${cls.taskItem}
+                        ${task.isCompleted ? cls.completed : ''}
                         ${task.isImportant ? cls.important : ''}
                     `}
                 >
@@ -47,7 +81,7 @@ const TaskList: React.FC = () => {
                             <input
                                 type="checkbox"
                                 checked={task.isCompleted}
-                                readOnly
+                                onChange={() => handleToggleComplete(task)}
                                 className={cls.checkbox}
                             />
                             <div>
@@ -65,11 +99,6 @@ const TaskList: React.FC = () => {
                             </div>
                         </div>
                         <div className={cls.taskBadges}>
-                            {task.isImportant && (
-                                <span className={cls.importantBadge}>
-                                    Важная
-                                </span>
-                            )}
                             <span className={`
                                 ${cls.statusBadge}
                                 ${task.isCompleted ? cls.completedBadge : cls.activeBadge}
@@ -77,8 +106,28 @@ const TaskList: React.FC = () => {
                             >
                                 {task.isCompleted ? 'Завершена' : 'Активна'}
                             </span>
+                            {/* Кнопки действий */}
+                            <div className={cls.taskActions}>
+                                <button
+                                    type="button"
+                                    onClick={() => handleEditTask(task)}
+                                    className={cls.editButton}
+                                    title="Редактировать задачу"
+                                >
+                                    <EditIcon />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteTask(task.id)}
+                                    className={cls.deleteButton}
+                                    title="Удалить задачу"
+                                >
+                                    <DeleteIcon />
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             ))}
         </div>

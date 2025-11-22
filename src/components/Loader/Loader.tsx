@@ -1,4 +1,4 @@
-import './Loader.scss';
+import 'components/Loader/Loader.scss';
 
 export const Loader = () => (
     <div className="lds-ellipsis">
