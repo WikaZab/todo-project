@@ -51,6 +51,7 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'error',
         'no-param-reassign': 'off',
         'no-undef': 'off',
+        'jsx-a11y/label-has-associated-control': 'off',
     },
     globals: {
         IS_DEV: true,
@@ -64,5 +65,8 @@ module.exports = {
                 'max-len': 'off',
             },
         },
+    ],
+    ignorePatterns: [
+        'src/types/openapi.ts',
     ],
 };

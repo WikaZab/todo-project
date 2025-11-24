@@ -4,6 +4,7 @@ import { useGetTaskByIdQuery, useUpdateTaskMutation } from 'api/taskApi';
 import { Task } from 'types/TodoListTypes';
 import * as cls from 'app/EditTaskPage/EditTaskPage.module.scss';
 import TaskForm from 'components/TaskForm/TaskForm';
+import { Loader } from 'components/Loader/Loader';
 
 const TaskEdit: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -37,10 +38,7 @@ const TaskEdit: React.FC = () => {
 
     if (isLoading) {
         return (
-            <div className={cls.loadingContainer}>
-                <div className={cls.spinner} />
-                <span className={cls.loadingText}>Загрузка задачи...</span>
-            </div>
+            <Loader textLoader="Загрузка задачи..." />
         );
     }
 
@@ -68,8 +66,6 @@ const TaskEdit: React.FC = () => {
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
                 isLoading={isUpdating}
-                isEditing // true для редактирования
-                showCompletedCheckbox // true для редактирования
             />
         </div>
     );

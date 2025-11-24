@@ -1,4 +1,4 @@
-// api/api.ts
+// api/apiAxios.ts
 import { BaseQueryFn } from '@reduxjs/toolkit/query';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 

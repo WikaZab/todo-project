@@ -1,196 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import { Task } from 'types/TodoListTypes';
+import React, { useState, useEffect, useMemo } from 'react';
+import { CreateTaskRequest, Task } from 'types/TodoListTypes';
 import * as cls from 'components/TaskForm/TaskForm.module.scss';
+import { useForm } from 'react-hook-form';
 
 export interface TaskFormProps {
     // Данные задачи (для редактирования) или пустая форма (для создания)
-    initialData?: Partial<Task>;
-
-    // Флаги управления интерфейсом
-    showCompletedCheckbox?: boolean;
-    isEditing?: boolean;
+    initialData?: CreateTaskRequest;
 
     // Обработчики
-    onSubmit: (data: Partial<Task>) => void;
+    onSubmit: (data: CreateTaskRequest) => void;
     onCancel?: () => void;
-
-    // Состояние загрузки
     isLoading?: boolean;
-
-    // Дополнительные классы
-    className?: string;
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({
-    initialData,
-    showCompletedCheckbox = true,
-    isEditing = false,
-    onSubmit,
-    onCancel,
-    isLoading = false,
-    className = '',
+    initialData, onSubmit, onCancel, isLoading,
 }) => {
-    const [formData, setFormData] = useState<Partial<Task>>({
-        name: '',
-        info: '',
-        isImportant: false,
-        isCompleted: false,
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues: initialData || {
+            name: '',
+            info: '',
+            isImportant: false,
+            isCompleted: false,
+        },
     });
-
-    const [errors, setErrors] = useState<{ name?: string }>({});
-
-    // Заполняем форму начальными данными
-    useEffect(() => {
-        if (initialData) {
-            setFormData({
-                name: initialData.name || '',
-                info: initialData.info || '',
-                isImportant: initialData.isImportant || false,
-                isCompleted: initialData.isCompleted || false,
-            });
+    const buttonText = useMemo(() => {
+        if (isLoading) {
+            return initialData ? 'Обновление...' : 'Отправление...';
         }
-    }, [initialData]);
-
-    // Обработчик изменения полей формы
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
-
-        if (type === 'checkbox') {
-            const { checked } = (e.target as HTMLInputElement);
-            setFormData((prev) => ({
-                ...prev,
-                [name]: checked,
-            }));
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        }
-
-        // Очищаем ошибки при вводе
-        if (name === 'name' && errors.name) {
-            setErrors((prev) => ({ ...prev, name: undefined }));
-        }
+        return initialData ? 'Обновить' : 'Отправить';
+    }, [isLoading, initialData]);
+    const handleFormSubmit = (data: CreateTaskRequest) => {
+        console.log('Отправленные данные:', data);
+        if (onSubmit) onSubmit(data);
     };
-
-    // Валидация формы
-    const validateForm = (): boolean => {
-        const newErrors: { name?: string } = {};
-
-        if (!formData.name?.trim()) {
-            newErrors.name = 'Название задачи обязательно';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    // Обработчик отправки формы
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
-        onSubmit(formData);
+    const handleCancel = () => {
+        reset();
+        if (onCancel) onCancel();
     };
 
     return (
-        <div className={`${cls.formContainer} ${className}`}>
-            <h1 className={cls.title}>
-                {isEditing ? 'Редактирование задачи' : 'Создание новой задачи'}
-            </h1>
-
-            <form onSubmit={handleSubmit} className={cls.form}>
+        <div className={cls.formContainer}>
+            <h2>{initialData ? 'Редактировать задачу' : 'Новая задача'}</h2>
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+                {/* Поле Название */}
                 <div className={cls.formGroup}>
-                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                    <label htmlFor="name" className={cls.label}>
-                        Название задачи *
+                    <label>
+                        Название:
+                        <input
+                            type="text"
+                            {...register('name')}
+                            className={cls.formInput}
+                        />
                     </label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        value={formData.name || ''}
-                        onChange={handleInputChange}
-                        className={`${cls.input} ${errors.name ? cls.inputError : ''}`}
-                        placeholder="Введите название задачи"
-                        disabled={isLoading}
-                    />
-                    {errors.name && (
-                        <span className={cls.errorText}>{errors.name}</span>
-                    )}
                 </div>
 
+                {/* Поле Info */}
                 <div className={cls.formGroup}>
-                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                    <label htmlFor="info" className={cls.label}>
-                        Описание задачи
+                    <label>
+                        Info:
+                        <input
+                            type="text"
+                            {...register('info')}
+                            className={cls.formInput}
+                        />
                     </label>
-                    <textarea
-                        id="info"
-                        name="info"
-                        value={formData.info || ''}
-                        onChange={handleInputChange}
-                        className={cls.textarea}
-                        placeholder="Введите описание задачи (необязательно)"
-                        rows={4}
-                        disabled={isLoading}
-                    />
                 </div>
 
-                <div className={cls.checkboxGroup}>
-                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                {/* Чекбоксы */}
+                <div className={cls.formGroup}>
                     <label className={cls.checkboxLabel}>
                         <input
                             type="checkbox"
-                            name="isImportant"
-                            checked={formData.isImportant || false}
-                            onChange={handleInputChange}
-                            className={cls.checkbox}
-                            disabled={isLoading}
+                            disabled={initialData?.isCompleted}
+                            {...register('isImportant')}
                         />
-                        <span className={cls.checkboxText}>Важная задача</span>
+                        Пометить как важное
                     </label>
-
-                    {showCompletedCheckbox && (
-                        // eslint-disable-next-line jsx-a11y/label-has-associated-control
-                        <label className={cls.checkboxLabel}>
-                            <input
-                                type="checkbox"
-                                name="isCompleted"
-                                checked={formData.isCompleted || false}
-                                onChange={handleInputChange}
-                                className={cls.checkbox}
-                                disabled={isLoading}
-                            />
-                            <span className={cls.checkboxText}>Задача завершена</span>
-                        </label>
-                    )}
                 </div>
 
-                <div className={cls.actions}>
-                    {onCancel && (
-                        <button
-                            type="button"
-                            onClick={onCancel}
-                            className={cls.cancelButton}
-                            disabled={isLoading}
-                        >
-                            Отмена
-                        </button>
-                    )}
-                    <button
-                        type="submit"
-                        className={cls.submitButton}
-                        disabled={isLoading}
-                    >
-                        {/* eslint-disable-next-line no-nested-ternary */}
-                        {isLoading
-                            ? (isEditing ? 'Сохранение...' : 'Создание...')
-                            : (isEditing ? 'Сохранить изменения' : 'Создать задачу')}
+                <div className={cls.formGroup}>
+                    <label className={cls.checkboxLabel}>
+                        <input
+                            type="checkbox"
+                            {...register('isCompleted')}
+                        />
+                        Выполнено
+                    </label>
+                </div>
+
+                {/* Кнопки */}
+                <div className={cls.buttonGroup}>
+                    <button type="submit" className={cls.btnPrimary}>
+                        {buttonText}
+                    </button>
+                    <button type="button" onClick={handleCancel} className={cls.btnSecondary}>
+                        Отменить
                     </button>
                 </div>
             </form>

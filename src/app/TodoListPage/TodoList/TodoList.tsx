@@ -5,6 +5,7 @@ import * as cls from 'app/TodoListPage/TodoList/TodoList.module.scss';
 import { useNavigate } from 'react-router';
 import DeleteIcon from 'components/assets/delete.svg';
 import EditIcon from 'components/assets/edit.svg';
+import { Loader } from 'components/Loader/Loader';
 
 const TaskList: React.FC = () => {
     const { data: tasks, error: getTaskError, isLoading } = useGetTasksQuery();
@@ -41,10 +42,7 @@ const TaskList: React.FC = () => {
 
     if (isLoading) {
         return (
-            <div className={cls.loadingContainer}>
-                <div className={cls.spinner} />
-                <span className={cls.loadingText}>Загрузка задач...</span>
-            </div>
+            <Loader textLoader="Звгрузка задач..." />
         );
     }
 

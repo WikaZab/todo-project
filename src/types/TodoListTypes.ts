@@ -1,13 +1,24 @@
 export interface Task {
     id: number;
     name: string;
-    info: string;
-    isImportant: boolean;
-    isCompleted: boolean;
+    info?: string;
+    isImportant?: boolean;
+    isCompleted?: boolean;
 }
 
-export type CreateTaskRequest = Omit<Task, 'id'>;
-export type UpdateTaskRequest = Partial<Omit<Task, 'id'>> & { id: number };
+export interface CreateTaskRequest {
+    name: string;
+    info?: string;
+    isImportant?: boolean;
+    isCompleted?: boolean;
+}
+export interface UpdateTaskRequest {
+    id: number;
+    name?: string;
+    info?: string;
+    isImportant?: boolean;
+    isCompleted?: boolean;
+}
 
 export type TaskFilter = {
     isCompleted?: boolean;

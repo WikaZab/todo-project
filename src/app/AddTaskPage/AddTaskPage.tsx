@@ -1,126 +1,30 @@
 // components/CreateTask/CreateTask.tsx
 import React, { useState } from 'react';
-import { useCreateTaskMutation } from '../../api/taskApi';
+import { useCreateTaskMutation } from 'api/taskApi';
+import TaskForm from 'components/TaskForm/TaskForm';
+import { CreateTaskRequest, Task } from 'types/TodoListTypes';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTask = () => {
-    const [name, setName] = useState('');
-    const [info, setInfo] = useState('');
-    const [isImportant, setIsImportant] = useState(false);
-    const [isCompleted, setIsCompleted] = useState(false);
+    const navigate = useNavigate();
+    const [createTask, { isLoading }] = useCreateTaskMutation();
 
-    const [createTask, { isLoading, error }] = useCreateTaskMutation();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!name.trim()) {
-            alert('Введите название задачи');
-            return;
-        }
-
+    const handleSubmit = async (newTask: CreateTaskRequest) => {
         try {
-            await createTask({
-                name: name.trim(),
-                info: info.trim(),
-                isImportant,
-                isCompleted,
-            }).unwrap();
+            await createTask(newTask).unwrap();
 
-            // Очищаем форму после успешного создания
-            setName('');
-            setInfo('');
-            setIsImportant(false);
-            setIsCompleted(false);
-
-            alert('Задача успешно создана!');
-        } catch (err) {
-            console.error('Failed to create task:', err);
-            alert('Ошибка при создании задачи');
+            navigate('/'); // Возвращаемся на главную страницу после успешного обновления
+        } catch (error) {
+            console.error('Ошибка при создании задачи:', error);
         }
     };
 
-    const resetForm = () => {
-        setName('');
-        setInfo('');
-        setIsImportant(false);
-        setIsCompleted(false);
+    const handleCancel = () => {
+        navigate('/');
     };
 
     return (
-        <form onSubmit={handleSubmit} className="create-task-form">
-            <h3>Создать новую задачу</h3>
-
-            <div className="form-group">
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label>Название задачи *</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Введите название задачи"
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label>Описание</label>
-                <textarea
-                    value={info}
-                    onChange={(e) => setInfo(e.target.value)}
-                    placeholder="Введите описание задачи"
-                    rows={3}
-                />
-            </div>
-
-            <div className="checkboxes">
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label className="checkbox-label">
-                    <input
-                        type="checkbox"
-                        checked={isImportant}
-                        onChange={(e) => setIsImportant(e.target.checked)}
-                    />
-                    Важная задача
-                </label>
-
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label className="checkbox-label">
-                    <input
-                        type="checkbox"
-                        checked={isCompleted}
-                        onChange={(e) => setIsCompleted(e.target.checked)}
-                    />
-                    Выполнена
-                </label>
-            </div>
-
-            <div className="form-actions">
-                <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="btn primary"
-                >
-                    {isLoading ? 'Создание...' : 'Создать задачу'}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={resetForm}
-                    className="btn secondary"
-                >
-                    Очистить
-                </button>
-            </div>
-
-            {error && (
-                <div className="error-message">
-                    Ошибка при создании задачи:
-                    {' '}
-                    {JSON.stringify(error)}
-                </div>
-            )}
-        </form>
+        <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} isLoading={isLoading} />
     );
 };
 export default CreateTask;

@@ -1,10 +1,12 @@
 import 'components/Loader/Loader.scss';
+import React from 'react';
 
-export const Loader = () => (
-    <div className="lds-ellipsis">
-        <div />
-        <div />
-        <div />
-        <div />
+interface LoaderProps {
+    textLoader?: string;
+}
+export const Loader:React.FC<LoaderProps> = ({ textLoader }) => (
+    <div className="loadingContainer">
+        <div className="spinner" />
+        <span className="loadingText">{textLoader}</span>
     </div>
 );

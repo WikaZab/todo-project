@@ -1,6 +1,6 @@
 // api/taskApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react'; // Убрали fetchBaseQuery
-import { axiosBaseQuery } from './api';
+import { axiosBaseQuery } from './apiAxios';
 import {
     CreateTaskRequest, Task, TaskFilter, UpdateTaskRequest,
 } from '../types/TodoListTypes';
