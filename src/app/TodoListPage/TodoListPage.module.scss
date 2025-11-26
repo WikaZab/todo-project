@@ -1,38 +1,78 @@
-
 .app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: "DejaVu Sans";
-  color: var(--font-color);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: "DejaVu Sans", Arial, sans-serif;
+    color: var(--font-color);
+
+    @media (max-width: 480px) {
+        padding: 12px;
+    }
 }
 
 .header {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  border-radius: 20px;
-  background-color: var(--space-color);
-  .title {
-    color: var(--font-primary-color);
-  }
+    width: 100%;
+    height: clamp(80px, 12vw, 100px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    border-radius: 20px;
+    background-color: var(--space-color);
+    box-shadow: 0 4px 15px rgb(0 0 0 / 5%);
+
+    .title {
+        color: var(--font-primary-color);
+        margin: 0;
+
+        h1 {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 700;
+        }
+    }
+
+    @media (max-width: 640px) {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        padding: 10px 16px;
+        text-align: center;
+        height: 100px;
+    }
 }
 
 .main {
-  display: grid;
-  margin-top: 10px;
-  border-radius: 20px;
-  background-color: var(--space-color);
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+
+    @media (min-width: 861px) {
+        grid-template-columns: 1fr;
+    }
 }
+
 .filtersSection {
-  display: grid;
-  margin-top: 10px;
-  border-radius: 20px;
-  background-color: var(--space-color);
+    border-radius: 16px;
+    background-color: var(--space-color);
+    padding: 20px;
+    box-shadow: 0 4px 15px rgb(0 0 0 / 5%);
+
+    @media (max-width: 860px) {
+        padding: 16px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 14px;
+    }
 }
+
 .sectionTasks {
-  padding: 20px;
+    padding: clamp(16px, 3vw, 28px);
+    border-radius: 16px;
+    background-color: var(--space-color);
+    box-shadow: 0 4px 15px rgb(0 0 0 / 5%);
+    min-height: 60vh;
 }

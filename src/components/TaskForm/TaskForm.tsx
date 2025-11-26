@@ -58,7 +58,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                             {...register('name')}
                             className={cls.formInput}
                             placeholder="Введите название задачи"
-                            maxLength={25}
+                            maxLength={50}
                         />
                     </label>
                     <div className={cls.fieldInfo}>
@@ -75,11 +75,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 {/* Поле Info */}
                 <div className={cls.formGroup}>
                     <label>
-                        Info:
+                        Описание:
                         <textarea
                             placeholder="Опишите задачу"
                             rows={4}
-                            maxLength={50}
+                            maxLength={100}
                             {...register('info')}
                             className={cls.formInput}
                         />
@@ -87,7 +87,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                     <div className={cls.fieldInfo}>
                         <span className={cls.charCount}>
                             {infoValue.length}
-                            /50 символов
+                            /100 символов
                         </span>
                         {errors.info && (
                             <span className={cls.errorMessage}>{errors.info.message}</span>

@@ -92,8 +92,8 @@ export const FilterTasks: React.FC<TaskFiltersProps> = ({ setFilters }) => {
                         {...register('isCompleted')}
                     >
                         <option value="">Все по готовности</option>
-                        <option value="true">Выполненные</option>
-                        <option value="false">Невыполненные</option>
+                        <option value="true">Выполнено</option>
+                        <option value="false">Невыполнено</option>
                     </select>
                 </div>
 

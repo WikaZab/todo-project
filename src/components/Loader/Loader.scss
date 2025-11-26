@@ -1,28 +1,29 @@
 .loadingContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
 }
 
 .spinner {
-  animation: spin 1s linear infinite;
-  border-radius: 50%;
-  height: 2rem;
-  width: 2rem;
-  border-bottom: 2px solid var(--font-primary-color);
+    animation: spin 1s linear infinite;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+    border-bottom: 2px solid var(--font-primary-color);
 }
 
 .loadingText {
-  color: var(--font-color);
-  margin-left: 0.5rem;
+    color: var(--font-color);
+    margin-left: 0.5rem;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
