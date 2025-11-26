@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetTaskByIdQuery, useUpdateTaskMutation } from 'api/taskApi';
+import { useGetTaskByIdQuery, useUpdateTaskMutation } from 'api/tasksApi';
 import { Task } from 'types/TodoListTypes';
 import * as cls from 'app/EditTaskPage/EditTaskPage.module.scss';
 import TaskForm from 'components/TaskForm/TaskForm';
@@ -25,9 +25,9 @@ const TaskEdit: React.FC = () => {
                 ...formData,
             }).unwrap();
 
-            navigate('/'); // Возвращаемся на главную страницу после успешного обновления
+            navigate('/');
         } catch (error) {
-            console.error('Ошибка при обновлении задачи:', error);
+            console.error('Ошибка обновления задачи:', error);
         }
     };
 

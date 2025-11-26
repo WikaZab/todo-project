@@ -1,17 +1,24 @@
-import React from 'react';
-import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from 'api/taskApi';
-import { Task } from 'types/TodoListTypes';
+import React, { memo } from 'react';
+import {
+    useDeleteTaskMutation, useGetTasksWithFiltersQuery,
+    useUpdateTaskMutation,
+} from 'api/tasksApi';
+import { Task, TaskFilter } from 'types/TodoListTypes';
 import * as cls from 'app/TodoListPage/TodoList/TodoList.module.scss';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from 'components/assets/delete.svg';
 import EditIcon from 'components/assets/edit.svg';
 import { Loader } from 'components/Loader/Loader';
 
-const TaskList: React.FC = () => {
-    const { data: tasks, error: getTaskError, isLoading } = useGetTasksQuery();
+interface TaskListProps {
+    filters: TaskFilter;
+}
+
+const TaskList: React.FC<TaskListProps> = ({ filters }) => {
+    const navigate = useNavigate();
+    const { data: filteredTasks, error: Error, isLoading } = useGetTasksWithFiltersQuery(filters);
     const [updateTask] = useUpdateTaskMutation();
     const [deleteTask] = useDeleteTaskMutation();
-    const navigate = useNavigate();
 
     // Обработчик изменения статуса задачи
     const handleToggleComplete = async (task: Task) => {
@@ -36,26 +43,23 @@ const TaskList: React.FC = () => {
 
     // Обработчик редактирования задачи
     const handleEditTask = (task: Task) => {
-        console.log('Редактирование задачи:', task);
-        navigate(`/edit/${task.id}`); // ______________________________________________________________________________ заменить пути на константы
+        navigate(`/tasks/edit/${task.id}`);
     };
 
     if (isLoading) {
-        return (
-            <Loader textLoader="Звгрузка задач..." />
-        );
+        return <Loader textLoader="Загрузка задач..." />;
     }
 
-    if (getTaskError) {
+    if (Error) {
         return (
             <div className={cls.errorContainer}>
                 Ошибка при загрузке задач:
-                {'status' in getTaskError ? getTaskError.status : 'Неизвестная ошибка'}
+                {'status' in Error ? Error.status : 'Неизвестная ошибка'}
             </div>
         );
     }
 
-    if (!tasks || tasks.length === 0) {
+    if (!filteredTasks || filteredTasks.length === 0) {
         return (
             <div className={cls.emptyContainer}>
                 Задачи не найдены
@@ -65,7 +69,7 @@ const TaskList: React.FC = () => {
 
     return (
         <div className={cls.tasksContainer}>
-            {tasks.map((task: Task) => (
+            {filteredTasks.map((task: Task) => (
                 <div
                     key={task.id}
                     className={`
@@ -74,6 +78,7 @@ const TaskList: React.FC = () => {
                         ${task.isImportant ? cls.important : ''}
                     `}
                 >
+                    {/* Остальной JSX остается таким же */}
                     <div className={cls.taskContent}>
                         <div className={cls.taskMain}>
                             <input
@@ -104,7 +109,6 @@ const TaskList: React.FC = () => {
                             >
                                 {task.isCompleted ? 'Завершена' : 'Активна'}
                             </span>
-                            {/* Кнопки действий */}
                             <div className={cls.taskActions}>
                                 <button
                                     type="button"
@@ -125,11 +129,10 @@ const TaskList: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
             ))}
         </div>
     );
 };
 
-export default TaskList;
+export default memo(TaskList);

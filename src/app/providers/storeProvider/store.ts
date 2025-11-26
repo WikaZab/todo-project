@@ -1,12 +1,11 @@
-// store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import { taskApi } from 'api/taskApi';
+import { tasksApi } from 'api/tasksApi';
 
 export const store = configureStore({
     reducer: {
-        [taskApi.reducerPath]: taskApi.reducer,
+        [tasksApi.reducerPath]: tasksApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(taskApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(tasksApi.middleware),
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

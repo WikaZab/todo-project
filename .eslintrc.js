@@ -7,7 +7,7 @@ module.exports = {
     extends: [
         'plugin:react/recommended',
         'airbnb',
-        'airbnb-typescript', // Добавьте это для TypeScript
+        'airbnb-typescript',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -16,7 +16,7 @@ module.exports = {
         },
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json', // Добавьте это для Airbnb TypeScript
+        project: './tsconfig.json',
     },
     plugins: [
         'react',

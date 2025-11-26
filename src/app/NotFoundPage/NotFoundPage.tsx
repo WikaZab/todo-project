@@ -1,19 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import cls from 'app/NotFoundPage/notFoundPage.module.scss';
+import * as cls from 'app/NotFoundPage/notFoundPage.module.scss';
 
 export const NotFoundPage = () => (
-    <div className={cls.nodFoundPage}>
-        <div className="not-found-content">
-            <div className="not-found-icon">⚠️</div>
-            <h1 className="not-found-title">404</h1>
-            <h2>Страница не найдена</h2>
-            <p>К сожалению, мы не можем найти запрашиваемую страницу.</p>
-            <div className="not-found-actions">
-                <Link to="/" className="not-found-button primary">
+    <div className={cls.notFoundPage}>
+        <div className={cls.content}>
+            <h1 className={cls.title}>404</h1>
+            <h2 className={cls.subtitle}>Страница не найдена</h2>
+            <div className={cls.actions}>
+                <Link to="/" className={cls.link}>
                     На главную
                 </Link>
-                <button type="button" onClick={() => window.history.back()} className="not-found-button secondary">
+                <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className={cls.btn}
+                >
                     Назад
                 </button>
             </div>

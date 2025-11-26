@@ -1,8 +1,7 @@
-// components/CreateTask/CreateTask.tsx
-import React, { useState } from 'react';
-import { useCreateTaskMutation } from 'api/taskApi';
+import React from 'react';
+import { useCreateTaskMutation } from 'api/tasksApi';
 import TaskForm from 'components/TaskForm/TaskForm';
-import { CreateTaskRequest, Task } from 'types/TodoListTypes';
+import { CreateTaskRequest } from 'types/TodoListTypes';
 import { useNavigate } from 'react-router-dom';
 
 const CreateTask = () => {
@@ -13,14 +12,14 @@ const CreateTask = () => {
         try {
             await createTask(newTask).unwrap();
 
-            navigate('/'); // Возвращаемся на главную страницу после успешного обновления
+            navigate('/tasks');
         } catch (error) {
             console.error('Ошибка при создании задачи:', error);
         }
     };
 
     const handleCancel = () => {
-        navigate('/');
+        navigate('/tasks');
     };
 
     return (

@@ -1,0 +1,30 @@
+.container {
+  padding: 5px 25px;
+  h3 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+  }
+}
+.formFilter {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search {
+  input {
+    padding: 8px;
+    width: 200px;
+  }
+}
+.select {
+  select {
+    padding: 8px;
+  }
+}
+.btnClear {
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  cursor: pointer;
+}

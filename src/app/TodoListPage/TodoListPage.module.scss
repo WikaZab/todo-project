@@ -27,6 +27,12 @@
   border-radius: 20px;
   background-color: var(--space-color);
 }
-.section {
+.filtersSection {
+  display: grid;
+  margin-top: 10px;
+  border-radius: 20px;
+  background-color: var(--space-color);
+}
+.sectionTasks {
   padding: 20px;
 }

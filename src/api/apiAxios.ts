@@ -1,8 +1,6 @@
-// api/apiAxios.ts
 import { BaseQueryFn } from '@reduxjs/toolkit/query';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-// Интерфейс для ошибок
 interface ApiError {
     status: number;
     data: any;
@@ -17,23 +15,21 @@ const axiosInstance = axios.create({
     },
 });
 
-// Кастомный baseQuery с axios
 export const axiosBaseQuery = (): BaseQueryFn<
 {
     url: string;
     method: AxiosRequestConfig['method'];
     data?: AxiosRequestConfig['data'];
     params?: AxiosRequestConfig['params'];
-    body?: AxiosRequestConfig['data']; // Добавляем поддержку body
 },
 unknown,
 ApiError
 > => async ({
-    url, method, data, params, body,
+    url, method, data, params,
 }) => {
     try {
         // Используем data ИЛИ body (для совместимости)
-        const requestData = data || body;
+        const requestData = data;
 
         const config: AxiosRequestConfig = {
             url,

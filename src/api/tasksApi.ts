@@ -1,11 +1,10 @@
-// api/taskApi.ts
-import { createApi } from '@reduxjs/toolkit/query/react'; // Убрали fetchBaseQuery
-import { axiosBaseQuery } from './apiAxios';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import {
     CreateTaskRequest, Task, TaskFilter, UpdateTaskRequest,
-} from '../types/TodoListTypes';
+} from 'types/TodoListTypes';
+import { axiosBaseQuery } from 'api/apiAxios';
 
-export const taskApi = createApi({
+export const tasksApi = createApi({
     reducerPath: 'taskApi',
     baseQuery: axiosBaseQuery(),
     tagTypes: ['Task'],
@@ -28,8 +27,13 @@ export const taskApi = createApi({
         getTasksWithFilters: builder.query<Task[], TaskFilter>({
             query: (filters) => ({
                 url: '/tasks',
-                method: 'GET', // Явно указываем метод
-                params: filters,
+                method: 'GET',
+                params: {
+                    ...(filters.isImportant !== undefined && { isImportant: filters.isImportant }),
+                    ...(filters.isCompleted !== undefined && { isCompleted: filters.isCompleted }),
+                    ...(filters.name_like && { name_like: filters.name_like }),
+                    _t: Date.now(), // Добавляем timestamp для избежания кеширования
+                },
             }),
             providesTags: ['Task'],
         }),
@@ -38,7 +42,7 @@ export const taskApi = createApi({
             query: (newTask) => ({
                 url: '/tasks',
                 method: 'POST',
-                data: newTask, // Используем data вместо body
+                data: newTask,
             }),
             invalidatesTags: ['Task'],
         }),
@@ -47,7 +51,7 @@ export const taskApi = createApi({
             query: ({ id, ...changes }) => ({
                 url: `/tasks/${id}`,
                 method: 'PATCH',
-                data: changes, // Используем data вместо body
+                data: changes,
             }),
             invalidatesTags: ['Task'],
         }),
@@ -69,4 +73,4 @@ export const {
     useCreateTaskMutation,
     useUpdateTaskMutation,
     useDeleteTaskMutation,
-} = taskApi;
+} = tasksApi;

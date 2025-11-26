@@ -72,6 +72,9 @@
     background-color: var(--font-secondary-color);
     cursor: pointer;
   }
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
 }
 
 .btnSecondary {
@@ -80,4 +83,61 @@
     background-color: #545b62;
     cursor: pointer;
   }
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
 }
+
+
+// Стили для ошибок и информации
+.fieldInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.charCount {
+  color: var(--secondary-color);
+  font-size: 11px;
+}
+
+.errorMessage {
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+// Стили для общей информации формы
+.formInfo {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.validationInfo {
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  padding: 8px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 4px;
+}
+
+// Анимации
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+

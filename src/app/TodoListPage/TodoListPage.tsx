@@ -1,17 +1,12 @@
 import TaskList from 'app/TodoListPage/TodoList/TodoList';
-import { useNavigate } from 'react-router';
-import { HeaderCalendar } from 'app/HeaderTodo/HeaderTodo';
-import { useState } from 'react';
-import { Calendar } from 'app/TodoListPage/Calendar/Calendar';
-import * as cls from './TodoListPage.module.scss';
-
-export type ViewType = 'list' | 'calendar';
+import { HeaderCalendar } from 'components/HeaderTodo/HeaderTodo';
+import React, { memo, useState } from 'react';
+import { FilterTasks } from 'components/FilterTasks/FilterTasks';
+import { TaskFilter } from 'types/TodoListTypes';
+import * as cls from 'app/TodoListPage/TodoListPage.module.scss';
 
 const TodoListPage = () => {
-    const [view, setView] = useState<ViewType>('list');
-    const handleViewMode = (newView: ViewType) => {
-        setView(newView);
-    };
+    const [filters, setFilters] = useState<TaskFilter>({});
     return (
         <div>
             <div className={cls.app}>
@@ -20,27 +15,20 @@ const TodoListPage = () => {
                         <h1>TODO List</h1>
                     </div>
                     <div>
-                        <HeaderCalendar view={view} handleViewMode={handleViewMode} />
+                        <HeaderCalendar />
                     </div>
                 </header>
-
-                {view === 'list' ? (
-                    <main className={cls.main}>
-                        <div className={cls.section}>
-                            <TaskList />
-                        </div>
-                    </main>
-                ) : (
-                    <main className={cls.main}>
-                        <div className={cls.section}>
-                            <Calendar />
-                        </div>
-                    </main>
-                )}
-
+                <main className={cls.main}>
+                    <div className={cls.filtersSection}>
+                        <FilterTasks setFilters={setFilters} />
+                    </div>
+                    <div className={cls.sectionTasks}>
+                        <TaskList filters={filters} />
+                    </div>
+                </main>
             </div>
         </div>
     );
 };
 
-export default TodoListPage;
+export default memo(TodoListPage);
