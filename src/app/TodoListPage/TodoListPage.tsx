@@ -1,6 +1,6 @@
 import TaskList from 'app/TodoListPage/TodoList/TodoList';
 import { HeaderCalendar } from 'components/HeaderTodo/HeaderTodo';
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { FilterTasks } from 'components/FilterTasks/FilterTasks';
 import { TaskFilter } from 'types/TodoListTypes';
 import * as cls from 'app/TodoListPage/TodoListPage.module.scss';
@@ -31,4 +31,4 @@ const TodoListPage = () => {
     );
 };
 
-export default memo(TodoListPage);
+export default TodoListPage;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetTaskByIdQuery, useUpdateTaskMutation } from 'api/tasksApi';
 import { Task } from 'types/TodoListTypes';
@@ -16,7 +16,7 @@ const TaskEdit: React.FC = () => {
     const navigate = useNavigate();
 
     // Обработчик отправки формы
-    const handleSubmit = async (formData: Partial<Task>) => {
+    const handleSubmit = useCallback(async (formData: Partial<Task>) => {
         if (!task) return;
 
         try {
@@ -25,16 +25,16 @@ const TaskEdit: React.FC = () => {
                 ...formData,
             }).unwrap();
 
-            navigate('/');
+            navigate(-1);
         } catch (error) {
             console.error('Ошибка обновления задачи:', error);
         }
-    };
+    }, [updateTask, task, navigate]);
 
     // Обработчик отмены
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         navigate('/');
-    };
+    }, [navigate]);
 
     if (isLoading) {
         return (
@@ -71,4 +71,4 @@ const TaskEdit: React.FC = () => {
     );
 };
 
-export default TaskEdit;
+export default (TaskEdit);

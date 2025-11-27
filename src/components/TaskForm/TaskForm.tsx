@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { CreateTaskRequest } from 'types/TodoListTypes';
 import * as cls from 'components/TaskForm/TaskForm.module.scss';
 import { useForm } from 'react-hook-form';
@@ -12,29 +12,32 @@ export interface TaskFormProps {
     isLoading?: boolean;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({
-    initialData, onSubmit, onCancel, isLoading,
-}) => {
+const TaskForm: React.FC<TaskFormProps> = (props) => {
+    const {
+        initialData,
+        onSubmit,
+        onCancel,
+        isLoading = false,
+    } = props;
+    const defaultValues = useMemo(() => initialData ?? {
+        name: '',
+        info: '',
+        isImportant: false,
+        isCompleted: false,
+    }, [initialData]);
     const {
         register, handleSubmit, reset, watch,
         formState: { errors, isValid },
     } = useForm({
         resolver: yupResolver(taskFormSchema),
-        defaultValues: initialData || {
-            name: '',
-            info: '',
-            isImportant: false,
-            isCompleted: false,
-        },
+        mode: 'onChange', // валидация в реальном времени
+        defaultValues,
     });
-    const nameValue = watch('name') || '';
-    const infoValue = watch('info') || '';
-    const buttonText = useMemo(() => {
-        if (isLoading) {
-            return initialData ? 'Обновление...' : 'Отправление...';
-        }
-        return initialData ? 'Обновить' : 'Отправить';
-    }, [isLoading, initialData]);
+    const { name: nameValue = '', info: infoValue = '' } = watch();
+    // eslint-disable-next-line no-nested-ternary
+    const buttonText = initialData
+        ? (isLoading ? 'Обновление...' : 'Обновить')
+        : (isLoading ? 'Создание...' : 'Создать');
 
     const handleFormSubmit = (data: CreateTaskRequest) => {
         console.log('Отправленные данные:', data);
@@ -42,7 +45,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
     };
     const handleCancel = () => {
         reset();
-        if (onCancel) onCancel();
+        onCancel?.(); // проверка на undef null
     };
 
     return (
@@ -154,4 +157,4 @@ const TaskForm: React.FC<TaskFormProps> = ({
     );
 };
 
-export default TaskForm;
+export default memo(TaskForm);

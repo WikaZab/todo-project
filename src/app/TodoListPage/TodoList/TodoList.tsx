@@ -1,8 +1,5 @@
-import React, { memo } from 'react';
-import {
-    useDeleteTaskMutation, useGetTasksWithFiltersQuery,
-    useUpdateTaskMutation,
-} from 'api/tasksApi';
+import React, { memo, useCallback } from 'react';
+import { useDeleteTaskMutation, useGetTasksWithFiltersQuery, useUpdateTaskMutation } from 'api/tasksApi';
 import { Task, TaskFilter } from 'types/TodoListTypes';
 import * as cls from 'app/TodoListPage/TodoList/TodoList.module.scss';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +18,7 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
     const [deleteTask] = useDeleteTaskMutation();
 
     // Обработчик изменения статуса задачи
-    const handleToggleComplete = async (task: Task) => {
+    const handleToggleComplete = useCallback(async (task: Task) => {
         try {
             await updateTask({
                 id: task.id,
@@ -30,16 +27,16 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
         } catch (error) {
             console.error('Ошибка при обновлении задачи:', error);
         }
-    };
+    }, [updateTask]);
 
     // Обработчик удаления задачи
-    const handleDeleteTask = async (taskId: number) => {
+    const handleDeleteTask = useCallback(async (taskId: number) => {
         try {
             await deleteTask(taskId).unwrap();
         } catch (error) {
             console.error('Ошибка при удалении задачи:', error);
         }
-    };
+    }, [deleteTask]);
 
     // Обработчик редактирования задачи
     const handleEditTask = (task: Task) => {
@@ -73,12 +70,11 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                 <div
                     key={task.id}
                     className={`
-                        ${cls.taskItem}
-                        ${task.isCompleted ? cls.completed : ''}
-                        ${task.isImportant ? cls.important : ''}
-                    `}
+        ${cls.taskItem}
+        ${task.isCompleted ? cls.completed : ''}
+        ${task.isImportant ? cls.important : ''}
+    `}
                 >
-                    {/* Остальной JSX остается таким же */}
                     <div className={cls.taskContent}>
                         <div className={cls.taskMain}>
                             <input
@@ -87,12 +83,14 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                                 onChange={() => handleToggleComplete(task)}
                                 className={cls.checkbox}
                             />
-                            <div>
+                            <div className={cls.taskTextContainer}>
+                                {' '}
+                                {/* Добавлен контейнер для текста */}
                                 <h3 className={`
-                                    ${cls.taskName}
-                                    ${task.isCompleted ? cls.completedText : ''}
-                                    ${task.isImportant ? cls.importantText : ''}
-                                `}
+                    ${cls.taskName}
+                    ${task.isCompleted ? cls.completedText : ''}
+                    ${task.isImportant ? cls.importantText : ''}
+                `}
                                 >
                                     {task.name}
                                 </h3>
@@ -103,9 +101,9 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                         </div>
                         <div className={cls.taskBadges}>
                             <span className={`
-                                ${cls.statusBadge}
-                                ${task.isCompleted ? cls.completedBadge : cls.activeBadge}
-                            `}
+                ${cls.statusBadge}
+                ${task.isCompleted ? cls.completedBadge : cls.activeBadge}
+            `}
                             >
                                 {task.isCompleted ? 'Завершена' : 'Активна'}
                             </span>

@@ -25,6 +25,10 @@
     background-color: var(--bg-color);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 
+    /* Добавляем автоматическое расширение по высоте */
+    min-height: fit-content;
+    height: auto;
+
     &.completed {
         opacity: 0.5;
     }
@@ -36,14 +40,18 @@
 
 .taskContent {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Меняем на flex-start для правильного выравнивания */
     justify-content: space-between;
+    gap: 1rem; /* Добавляем отступ между контентом и действиями */
+    width: 100%;
 }
 
 .taskMain {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Выравнивание по верху */
     gap: 0.75rem;
+    flex: 1; /* Занимает доступное пространство */
+    min-width: 0; /* Позволяет контенту сжиматься */
 }
 
 .checkbox {
@@ -52,11 +60,22 @@
     color: #2563eb;
     border-radius: 0.25rem;
     cursor: pointer;
+    margin-top: 0.25rem; /* Выравниваем чекбокс с текстом */
+    flex-shrink: 0; /* Запрещаем сжатие чекбокса */
+}
+
+/* Контейнер для текста задачи */
+.taskTextContainer {
+    flex: 1;
+    min-width: 0; /* Важно для правильной работы text-overflow */
+    word-wrap: break-word; /* Перенос длинных слов */
+    overflow-wrap: break-word; /* Современная альтернатива */
 }
 
 .taskName {
     font-weight: 500;
     color: var(--font-color);
+    word-break: break-word; /* Перенос слов если нужно */
 
     &.completedText {
         text-decoration: line-through;
@@ -72,18 +91,24 @@
     font-size: 0.875rem;
     color: #4b5563;
     margin-top: 0.25rem;
+    word-break: break-word; /* Перенос длинного текста */
+    white-space: pre-wrap; /* Сохраняет переносы строк */
+    line-height: 1.4; /* Улучшает читаемость */
 }
 
 .taskBadges {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Ставим элементы в колонку */
+    align-items: flex-end;
     gap: 0.5rem;
+    flex-shrink: 0; /* Запрещаем сжатие */
 }
 
 .statusBadge {
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     border-radius: 9999px;
+    white-space: nowrap; /* Запрещаем перенос текста в бейдже */
 
     &.completedBadge {
         background-color: #dcfce7;
@@ -107,19 +132,21 @@
         border: none;
         padding: 3px 0 0 3px;
         cursor: pointer;
+        flex-shrink: 0;
     }
 
     .deleteButton {
         background-color: var(--secondary-color);
         border: none;
         cursor: pointer;
+        flex-shrink: 0;
     }
 }
 
 @media (min-width: 640px) {
     .taskContent {
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start; /* Сохраняем выравнивание по верху */
     }
 
     .taskMain {
@@ -128,7 +155,9 @@
 
     .taskBadges {
         width: auto;
-        justify-content: flex-end;
+        justify-content: flex-start;
+        flex-direction: row; /* На десктопе можно вернуть в строку */
+        align-items: center;
     }
 
     .taskActions {
@@ -139,5 +168,24 @@
             width: 32px;
             height: 32px;
         }
+    }
+}
+
+/* Дополнительные медиа-запросы для лучшей адаптивности */
+@media (max-width: 639px) {
+    .taskContent {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .taskBadges {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .taskActions {
+        margin-left: auto;
     }
 }

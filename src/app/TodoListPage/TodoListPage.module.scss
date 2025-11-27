@@ -45,8 +45,6 @@
 }
 
 .main {
-    display: grid;
-    gap: 16px;
     margin-top: 16px;
 
     @media (min-width: 861px) {
@@ -70,6 +68,7 @@
 }
 
 .sectionTasks {
+    margin-top: 15px;
     padding: clamp(16px, 3vw, 28px);
     border-radius: 16px;
     background-color: var(--space-color);
