@@ -7,11 +7,12 @@ export interface Task {
 }
 
 export interface CreateTaskRequest {
-    name?: string;
+    name: string;
     info?: string;
     isImportant?: boolean;
     isCompleted?: boolean;
 }
+
 export interface UpdateTaskRequest {
     id: number;
     name?: string;
@@ -23,5 +24,5 @@ export interface UpdateTaskRequest {
 export type TaskFilter = {
     isCompleted?: boolean;
     isImportant?: boolean;
-    name_like?:string;
+    name_like?: string;
 };

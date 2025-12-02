@@ -36,12 +36,12 @@ export const FilterTasks: React.FC<TaskFiltersProps> = ({ setFilters }) => {
             newSearchParams.set('search', data.name_like);
         }
 
-        if (data.isImportant && data.isImportant !== '') {
+        if (data.isImportant) {
             newFilters.isImportant = data.isImportant === 'true';
             newSearchParams.set('isImportant', data.isImportant);
         }
 
-        if (data.isCompleted && data.isCompleted !== '') {
+        if (data.isCompleted) {
             newFilters.isCompleted = data.isCompleted === 'true';
             newSearchParams.set('isCompleted', data.isCompleted);
         }

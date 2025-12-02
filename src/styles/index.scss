@@ -4,14 +4,16 @@
 @use "styles/variables/global.scss";
 
 .app {
-  background-color: var(--bg-color);
-  color: var(--font-color);
-  min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    min-height: 100vh;
 }
+
 .body {
-  font: var(--font-m);
-  color: var(--primary-color);
+    font: var(--font-m);
+    color: var(--primary-color);
 }
+
 .switcher {
-  padding: 10px 0 0 30px ;
+    padding: 10px 0 0 30px;
 }

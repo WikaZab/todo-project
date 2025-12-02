@@ -65,7 +65,7 @@ const TaskEdit: React.FC = () => {
                 initialData={task}
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
-                isLoading={isUpdating}
+                isUpdating={isUpdating}
             />
         </div>
     );

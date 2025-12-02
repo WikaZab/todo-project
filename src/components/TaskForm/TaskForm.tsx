@@ -9,7 +9,7 @@ export interface TaskFormProps {
     initialData?: CreateTaskRequest;
     onSubmit: (data: CreateTaskRequest) => void;
     onCancel?: () => void;
-    isLoading?: boolean;
+    isUpdating?: boolean;
 }
 
 const TaskForm: React.FC<TaskFormProps> = (props) => {
@@ -17,7 +17,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
         initialData,
         onSubmit,
         onCancel,
-        isLoading = false,
+        isUpdating = false,
     } = props;
     const defaultValues = useMemo(() => initialData ?? {
         name: '',
@@ -36,8 +36,8 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     const { name: nameValue = '', info: infoValue = '' } = watch();
     // eslint-disable-next-line no-nested-ternary
     const buttonText = initialData
-        ? (isLoading ? 'Обновление...' : 'Обновить')
-        : (isLoading ? 'Создание...' : 'Создать');
+        ? (isUpdating ? 'Обновление...' : 'Обновить')
+        : (isUpdating ? 'Создание...' : 'Создать');
 
     const handleFormSubmit = (data: CreateTaskRequest) => {
         console.log('Отправленные данные:', data);
@@ -62,6 +62,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                             className={cls.formInput}
                             placeholder="Введите название задачи"
                             maxLength={50}
+                            disabled={initialData?.isCompleted}
                         />
                     </label>
                     <div className={cls.fieldInfo}>
@@ -85,6 +86,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                             maxLength={100}
                             {...register('info')}
                             className={cls.formInput}
+                            disabled={initialData?.isCompleted}
                         />
                     </label>
                     <div className={cls.fieldInfo}>
@@ -132,7 +134,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                     <button
                         type="submit"
                         className={cls.btnPrimary}
-                        disabled={isLoading}
+                        disabled={isUpdating}
                     >
                         {buttonText}
                     </button>
@@ -140,7 +142,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                         type="button"
                         onClick={handleCancel}
                         className={cls.btnSecondary}
-                        disabled={isLoading}
+                        disabled={isUpdating}
                     >
                         Отменить
                     </button>

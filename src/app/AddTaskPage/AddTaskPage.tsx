@@ -32,7 +32,7 @@ const CreateTask = () => {
                     {message.text}
                 </div>
             )}
-            <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} isLoading={isLoading} />
+            <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} isUpdating={isLoading} />
         </div>
     );
 };

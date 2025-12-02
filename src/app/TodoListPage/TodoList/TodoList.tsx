@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { useDeleteTaskMutation, useGetTasksWithFiltersQuery, useUpdateTaskMutation } from 'api/tasksApi';
 import { Task, TaskFilter } from 'types/TodoListTypes';
 import * as cls from 'app/TodoListPage/TodoList/TodoList.module.scss';
@@ -17,8 +17,13 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
     const [updateTask] = useUpdateTaskMutation();
     const [deleteTask] = useDeleteTaskMutation();
 
+    // Храним состояния загрузки для каждой задачи
+    const [updatingTasks, setUpdatingTasks] = useState<Record<number, boolean>>({});
+    const [deletingTasks, setDeletingTasks] = useState<Record<number, boolean>>({});
+
     // Обработчик изменения статуса задачи
     const handleToggleComplete = useCallback(async (task: Task) => {
+        setUpdatingTasks((prev) => ({ ...prev, [task.id]: true }));
         try {
             await updateTask({
                 id: task.id,
@@ -26,17 +31,28 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
             }).unwrap();
         } catch (error) {
             console.error('Ошибка при обновлении задачи:', error);
+        } finally {
+            setUpdatingTasks((prev) => ({ ...prev, [task.id]: false }));
         }
     }, [updateTask]);
 
     // Обработчик удаления задачи
     const handleDeleteTask = useCallback(async (taskId: number) => {
+        if (deletingTasks[taskId]) {
+            return;
+        }
+        setDeletingTasks((prev) => ({ ...prev, [taskId]: true }));
+
         try {
             await deleteTask(taskId).unwrap();
         } catch (error) {
             console.error('Ошибка при удалении задачи:', error);
+        } finally {
+            setTimeout(() => {
+                setDeletingTasks((prev) => ({ ...prev, [taskId]: false }));
+            }, 0);
         }
-    }, [deleteTask]);
+    }, [deletingTasks, deleteTask]);
 
     // Обработчик редактирования задачи
     const handleEditTask = (task: Task) => {
@@ -70,10 +86,10 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                 <div
                     key={task.id}
                     className={`
-        ${cls.taskItem}
-        ${task.isCompleted ? cls.completed : ''}
-        ${task.isImportant ? cls.important : ''}
-    `}
+                        ${cls.taskItem}
+                        ${task.isCompleted ? cls.completed : ''}
+                        ${task.isImportant ? cls.important : ''}
+                    `}
                 >
                     <div className={cls.taskContent}>
                         <div className={cls.taskMain}>
@@ -81,16 +97,15 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                                 type="checkbox"
                                 checked={task.isCompleted}
                                 onChange={() => handleToggleComplete(task)}
+                                disabled={updatingTasks[task.id]}
                                 className={cls.checkbox}
                             />
                             <div className={cls.taskTextContainer}>
-                                {' '}
-                                {/* Добавлен контейнер для текста */}
                                 <h3 className={`
-                    ${cls.taskName}
-                    ${task.isCompleted ? cls.completedText : ''}
-                    ${task.isImportant ? cls.importantText : ''}
-                `}
+                                    ${cls.taskName}
+                                    ${task.isCompleted ? cls.completedText : ''}
+                                    ${task.isImportant ? cls.importantText : ''}
+                                `}
                                 >
                                     {task.name}
                                 </h3>
@@ -101,14 +116,15 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                         </div>
                         <div className={cls.taskBadges}>
                             <span className={`
-                ${cls.statusBadge}
-                ${task.isCompleted ? cls.completedBadge : cls.activeBadge}
-            `}
+                                ${cls.statusBadge}
+                                ${task.isCompleted ? cls.completedBadge : cls.activeBadge}
+                            `}
                             >
                                 {task.isCompleted ? 'Завершена' : 'Активна'}
                             </span>
                             <div className={cls.taskActions}>
                                 <button
+                                    disabled={updatingTasks[task.id] || deletingTasks[task.id]}
                                     type="button"
                                     onClick={() => handleEditTask(task)}
                                     className={cls.editButton}
@@ -117,12 +133,17 @@ const TaskList: React.FC<TaskListProps> = ({ filters }) => {
                                     <EditIcon />
                                 </button>
                                 <button
+                                    disabled={deletingTasks[task.id] || updatingTasks[task.id]}
                                     type="button"
                                     onClick={() => handleDeleteTask(task.id)}
                                     className={cls.deleteButton}
                                     title="Удалить задачу"
                                 >
-                                    <DeleteIcon />
+                                    {deletingTasks[task.id] ? (
+                                        <Loader />
+                                    ) : (
+                                        <DeleteIcon />
+                                    )}
                                 </button>
                             </div>
                         </div>
